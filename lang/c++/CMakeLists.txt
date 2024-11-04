@@ -93,16 +93,16 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(fmt)
 
 find_package(Snappy)
-if (SNAPPY_FOUND)
-    set(SNAPPY_PKG libsnappy)
+if (Snappy_FOUND)
+    set(Snappy_PKG libsnappy)
     add_definitions(-DSNAPPY_CODEC_AVAILABLE)
     message("Enabled snappy codec")
-else (SNAPPY_FOUND)
-    set(SNAPPY_PKG "")
-    set(SNAPPY_LIBRARIES "")
-    set(SNAPPY_INCLUDE_DIR "")
+else (Snappy_FOUND)
+    set(Snappy_PKG "")
+    set(Snappy_LIBRARIES "")
+    set(Snappy_INCLUDE_DIR "")
     message("Disabled snappy codec. libsnappy not found.")
-endif (SNAPPY_FOUND)
+endif (Snappy_FOUND)
 
 add_definitions (${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
 
@@ -134,8 +134,8 @@ set_property (TARGET avrocpp
     APPEND PROPERTY COMPILE_DEFINITIONS AVRO_DYN_LINK)
 
 add_library (avrocpp_s STATIC ${AVRO_SOURCE_FILES})
-target_include_directories(avrocpp_s PRIVATE ${SNAPPY_INCLUDE_DIR})
-target_link_libraries(avrocpp_s ${Boost_LIBRARIES} ${SNAPPY_LIBRARIES} fmt::fmt-header-only)
+target_include_directories(avrocpp_s PRIVATE ${Snappy_INCLUDE_DIR})
+target_link_libraries(avrocpp_s ${Boost_LIBRARIES} ${Snappy_LIBRARIES} fmt::fmt-header-only)
 
 set_property (TARGET avrocpp avrocpp_s
     APPEND PROPERTY COMPILE_DEFINITIONS AVRO_SOURCE)
@@ -146,8 +146,8 @@ set_target_properties (avrocpp PROPERTIES
 set_target_properties (avrocpp_s PROPERTIES
     VERSION ${AVRO_VERSION_MAJOR}.${AVRO_VERSION_MINOR}.${AVRO_VERSION_PATCH})
 
-target_link_libraries (avrocpp ${Boost_LIBRARIES} ${SNAPPY_LIBRARIES} fmt::fmt-header-only)
-target_include_directories(avrocpp PRIVATE ${SNAPPY_INCLUDE_DIR})
+target_link_libraries (avrocpp ${Boost_LIBRARIES} ${Snappy_LIBRARIES} fmt::fmt-header-only)
+target_include_directories(avrocpp PRIVATE ${Snappy_INCLUDE_DIR})
 
 add_executable (precompile test/precompile.cc)
 
@@ -200,7 +200,7 @@ enable_testing()
 
 macro (unittest name)
     add_executable (${name} test/${name}.cc)
-    target_link_libraries (${name} avrocpp ${Boost_LIBRARIES} ${SNAPPY_LIBRARIES})
+    target_link_libraries (${name} avrocpp ${Boost_LIBRARIES} ${Snappy_LIBRARIES})
     add_test (NAME ${name} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
 endmacro (unittest)
